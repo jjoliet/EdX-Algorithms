@@ -64,4 +64,64 @@ public class Sorting {
 		} while (swapped);
 		System.out.println(Arrays.toString(arr));
 	}
+
+	/* Merge sort Algorithm.  Due to the recursion, this one does not as easily for printing out the array in the driver class */
+	public static int[] mergeSort(int[] arr) {
+		if(arr == null) {
+			return null;
+		}
+		
+		int length = arr.length;
+
+		if(length > 1) {
+			int[] left = new int[length/2];
+			int[] right = new int[length - (length/2)];
+			int lInd = 0;
+			int rInd = 0;
+			/* Go through and assign the elements of the array to a left or right side split array. */
+			for(int i = 0; i < length; i++) {
+				if(i < length/2) {
+					/* Less then halfway, so add to left side */
+					left[lInd++] = arr[i];
+				}else {
+					/* More than halfway point, add to right side array. */
+					right[rInd++] = arr[i];
+				}
+			}
+
+			/* Recursive call to continue splitting the left and right sides */
+			left = mergeSort(left);
+			right = mergeSort(right);
+			return merge(left, right);
+		}else {
+			/* Base case so we always make sure to return */
+			return arr;
+		}	
+	}
+
+	private static int[] merge(int[] left, int[] right) {
+		int i = 0;
+		int lInd = 0;
+		int rInd = 0;
+		System.out.println("MERGING: " + Arrays.toString(left) + " | " + Arrays.toString(right));
+		int[] mergedArray = new int[left.length + right.length];
+		/* Go through each arrays index until one of the sub arrays has been depleted. This is where it is sorting. */
+		while(lInd < left.length && rInd < right.length) {
+			if(left[lInd] < right[rInd]) {
+				mergedArray[i++] = left[lInd++];
+			}else {
+				mergedArray[i++] = right[rInd++];
+			}
+		}		
+		/* Go through the remainder of the array that has not been depleted */
+		while(lInd < left.length) {
+			mergedArray[i++] = left[lInd++];
+		}
+		while(rInd < right.length) {
+			mergedArray[i++] = right[rInd++];
+		}
+
+		System.out.println("MERGED ARRAY: " + Arrays.toString(mergedArray));
+		return mergedArray;
+	}
 }
